@@ -1,14 +1,14 @@
-[Project Name] 🎯
+MedScan 🎯
 Basic Details
-Team Name: [Name]
+Team Name: HackPack
 Team Members
-Member 1: [Name] - [College]
-Member 2: [Name] - [College]
+Member 1: Akshaya Sunny V - Muthoot Institute Of TEchnology and Science
+Member 2: Richa Reji - Muthoot Institute Of TEchnology and Science
 Hosted Project Link
-[mention your project hosted link here]
+https://med-rho-seven.vercel.app/login.html
 
 Project Description
-[2-3 lines about what your project does]
+MedSCan is a web based apllication designed to provide accurate and easy to understand information about medicines, including their uses, dosage details, and potential side effects. The platfoorm helps users make informed healthcare decisions by offering quick access to reliable medication data.
 
 The Problem statement
 Many people consume medicines without fully understanding their purpose, correct dosage, potential side effects, or safety precautions. Accessing reliable and simplified medication information can be difficult, especially for individuals without medical knowledge. This lack of awareness may lead to misuse, overdosing, harmful drug interactions, or serious health complications.
@@ -31,13 +31,6 @@ Feature 1: Medicine Search – Quickly search for any medicine by name.
 Feature 2: Detailed Medicine Information – Provides purpose, usage, and recommended dosage.
 Feature 3: Side Effects Information – Lists possible side effects for safe usage.
 Feature 4: Safety Precautions – Includes warnings and important precautions.
-
-Implementation
-For Software:
-Installation
-[Installation commands - e.g., npm install, pip install -r requirements.txt]
-Run
-[Run commands - e.g., npm start, python app.py]
 
 Project Documentation
 For Software:
