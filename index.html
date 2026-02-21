@@ -7,9 +7,34 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <style>
+    .user-chip {
+      display: none;
+      align-items: center; gap: 8px;
+      padding: 5px 12px 5px 5px;
+      border: 1.5px solid var(--border); border-radius: 24px;
+      background: var(--surface2); font-size: 0.82rem; color: var(--text2); font-weight: 500;
+    }
+    .user-chip.visible { display: flex; }
+    .user-avatar {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--accent); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.72rem; font-weight: 700;
+    }
+    .btn-signout {
+      display: none;
+      padding: 7px 14px; border: 1.5px solid var(--border);
+      border-radius: 8px; background: transparent;
+      color: var(--text3); font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem; font-weight: 500; cursor: pointer;
+      transition: all 0.22s;
+    }
+    .btn-signout.visible { display: block; }
+    .btn-signout:hover { background: var(--accent-bg); color: var(--accent); border-color: var(--accent); }
+  </style>
 </head>
 <body>
-
   <!-- NAVBAR -->
   <nav class="navbar">
     <div class="nav-brand">
@@ -19,10 +44,14 @@
     <div class="nav-actions">
       <button class="nav-btn" id="compareToggle" onclick="toggleComparePanel()" title="Compare Medicines">⚖ Compare</button>
       <button class="nav-btn" id="favBtn" onclick="toggleFavPanel()" title="Saved Medicines">♥ Saved <span id="favCount" class="badge hidden">0</span></button>
+      <div class="user-chip" id="userChip">
+        <div class="user-avatar" id="userAvatar"></div>
+        <span id="userName"></span>
+      </div>
+      <button class="btn-signout" id="signOutBtn">Sign Out</button>
       <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()" title="Toggle dark mode">🌙</button>
     </div>
   </nav>
-
   <!-- HERO -->
   <header class="hero">
     <div class="hero-bg"></div>
@@ -30,7 +59,6 @@
       <div class="hero-tag">FDA-Verified Drug Database</div>
       <h1 class="hero-title">Know exactly what's<br><em>inside your medicine</em></h1>
       <p class="hero-sub">Instant access to side effects, warnings, interactions, and more — in plain English.</p>
-
       <div class="search-wrap">
         <div class="search-box">
           <span class="search-icon">⌕</span>
@@ -39,10 +67,8 @@
         </div>
         <div id="autocomplete" class="autocomplete-dropdown hidden"></div>
       </div>
-
       <div id="recentSearches" class="recent-searches"></div>
     </div>
-
     <div class="hero-stats">
       <div class="stat"><span class="stat-num">100K+</span><span class="stat-label">Drug Labels</span></div>
       <div class="stat-div"></div>
@@ -51,11 +77,8 @@
       <div class="stat"><span class="stat-num">Free</span><span class="stat-label">Always</span></div>
     </div>
   </header>
-
   <!-- MAIN -->
   <main>
-
-    <!-- LOADING -->
     <div id="loading" class="hidden">
       <div class="loader-wrap">
         <div class="dna-loader">
@@ -66,8 +89,6 @@
         <p>Querying FDA database<span class="dots"><span>.</span><span>.</span><span>.</span></span></p>
       </div>
     </div>
-
-    <!-- ERROR -->
     <div id="error" class="hidden">
       <div class="error-box">
         <div class="error-icon">⊘</div>
@@ -81,10 +102,7 @@
         </div>
       </div>
     </div>
-
-    <!-- RESULTS -->
     <div id="results" class="hidden">
-
       <div class="med-header">
         <div class="med-header-left">
           <div class="med-name-row">
@@ -100,16 +118,12 @@
           <button class="action-btn" onclick="shareResult()">↗ Share</button>
         </div>
       </div>
-
-      <!-- TABS -->
       <div class="tabs">
         <button class="tab active" data-tab="overview" onclick="switchTab('overview')">Overview</button>
         <button class="tab" data-tab="safety" onclick="switchTab('safety')">Safety</button>
         <button class="tab" data-tab="dosage" onclick="switchTab('dosage')">Dosage</button>
         <button class="tab" data-tab="tools" onclick="switchTab('tools')">Tools</button>
       </div>
-
-      <!-- OVERVIEW TAB -->
       <div id="tab-overview" class="tab-content active">
         <div class="cards-grid">
           <div class="card card-purpose">
@@ -124,38 +138,18 @@
           </div>
         </div>
       </div>
-
-      <!-- SAFETY TAB -->
       <div id="tab-safety" class="tab-content hidden">
         <div class="cards-grid three-col">
-          <div class="card card-side-effects">
-            <div class="card-label">⚠ Side Effects</div>
-            <p id="sideEffects"></p>
-          </div>
-          <div class="card card-warnings">
-            <div class="card-label">🚨 Warnings</div>
-            <p id="warnings"></p>
-          </div>
-          <div class="card card-interactions">
-            <div class="card-label">💊 Drug Interactions</div>
-            <p id="interactions"></p>
-          </div>
-          <div class="card card-avoid">
-            <div class="card-label">🚫 Who Should Avoid</div>
-            <p id="whoShouldAvoid"></p>
-          </div>
+          <div class="card card-side-effects"><div class="card-label">⚠ Side Effects</div><p id="sideEffects"></p></div>
+          <div class="card card-warnings"><div class="card-label">🚨 Warnings</div><p id="warnings"></p></div>
+          <div class="card card-interactions"><div class="card-label">💊 Drug Interactions</div><p id="interactions"></p></div>
+          <div class="card card-avoid"><div class="card-label">🚫 Who Should Avoid</div><p id="whoShouldAvoid"></p></div>
         </div>
       </div>
-
-      <!-- DOSAGE TAB -->
       <div id="tab-dosage" class="tab-content hidden">
         <div class="cards-grid">
-          <div class="card card-dosage full-width">
-            <div class="card-label">📏 Dosage & Administration</div>
-            <p id="dosage"></p>
-          </div>
+          <div class="card card-dosage full-width"><div class="card-label">📏 Dosage & Administration</div><p id="dosage"></p></div>
         </div>
-        <!-- DOSAGE CALCULATOR -->
         <div class="calculator-box">
           <h3 class="calc-title">⚗ Dosage Weight Calculator</h3>
           <p class="calc-sub">Estimate weight-based dosing (mg/kg). Always confirm with a healthcare provider.</p>
@@ -164,10 +158,7 @@
               <label>Weight</label>
               <div class="input-unit">
                 <input type="number" id="calcWeight" placeholder="70" min="1" max="300" oninput="calcDose()"/>
-                <select id="calcUnit" onchange="calcDose()">
-                  <option value="kg">kg</option>
-                  <option value="lbs">lbs</option>
-                </select>
+                <select id="calcUnit" onchange="calcDose()"><option value="kg">kg</option><option value="lbs">lbs</option></select>
               </div>
             </div>
             <div class="calc-field">
@@ -177,39 +168,25 @@
             <div class="calc-field">
               <label>Frequency</label>
               <select id="calcFreq" onchange="calcDose()">
-                <option value="1">Once daily</option>
-                <option value="2">Twice daily</option>
-                <option value="3">Three times daily</option>
-                <option value="4">Four times daily</option>
+                <option value="1">Once daily</option><option value="2">Twice daily</option>
+                <option value="3">Three times daily</option><option value="4">Four times daily</option>
               </select>
             </div>
           </div>
           <div id="calcResult" class="calc-result hidden">
             <div class="calc-result-inner">
-              <div class="calc-result-item">
-                <span class="calc-result-label">Single Dose</span>
-                <span class="calc-result-val" id="singleDose">—</span>
-              </div>
+              <div class="calc-result-item"><span class="calc-result-label">Single Dose</span><span class="calc-result-val" id="singleDose">—</span></div>
               <div class="calc-divider"></div>
-              <div class="calc-result-item">
-                <span class="calc-result-label">Daily Total</span>
-                <span class="calc-result-val" id="dailyDose">—</span>
-              </div>
+              <div class="calc-result-item"><span class="calc-result-label">Daily Total</span><span class="calc-result-val" id="dailyDose">—</span></div>
             </div>
             <p class="calc-disclaimer">⚕ For informational purposes only. Consult your doctor.</p>
           </div>
         </div>
       </div>
-
-      <!-- TOOLS TAB -->
       <div id="tab-tools" class="tab-content hidden">
         <div class="tools-grid">
-          <!-- PILL IDENTIFIER -->
           <div class="tool-card">
-            <div class="tool-header">
-              <span class="tool-icon">💊</span>
-              <h3>Pill Identifier</h3>
-            </div>
+            <div class="tool-header"><span class="tool-icon">💊</span><h3>Pill Identifier</h3></div>
             <p class="tool-desc">Describe your pill's appearance to identify it.</p>
             <div class="pill-form">
               <div class="pill-row">
@@ -239,13 +216,8 @@
             </div>
             <div id="pillResult" class="pill-result hidden"></div>
           </div>
-
-          <!-- INTERACTION CHECKER -->
           <div class="tool-card">
-            <div class="tool-header">
-              <span class="tool-icon">⚗</span>
-              <h3>Interaction Checker</h3>
-            </div>
+            <div class="tool-header"><span class="tool-icon">⚗</span><h3>Interaction Checker</h3></div>
             <p class="tool-desc">Check if this medicine interacts with others you take.</p>
             <div class="interaction-list" id="interactionList"></div>
             <div class="interaction-add">
@@ -257,57 +229,63 @@
           </div>
         </div>
       </div>
-
-    </div><!-- /results -->
-
+    </div>
   </main>
-
-  <!-- COMPARE PANEL -->
   <div id="comparePanel" class="side-panel hidden">
-    <div class="panel-header">
-      <h3>⚖ Compare Medicines</h3>
-      <button class="panel-close" onclick="toggleComparePanel()">✕</button>
-    </div>
-    <div id="compareSlots" class="compare-slots">
-      <div class="compare-empty">Search for medicines and click <strong>Compare</strong> to add them here.</div>
-    </div>
+    <div class="panel-header"><h3>⚖ Compare Medicines</h3><button class="panel-close" onclick="toggleComparePanel()">✕</button></div>
+    <div id="compareSlots" class="compare-slots"><div class="compare-empty">Search for medicines and click <strong>Compare</strong> to add them here.</div></div>
     <button class="panel-action-btn" id="runCompareBtn" onclick="runCompare()" style="display:none">Compare Side by Side →</button>
   </div>
-
-  <!-- FAVOURITES PANEL -->
   <div id="favPanel" class="side-panel hidden">
-    <div class="panel-header">
-      <h3>♥ Saved Medicines</h3>
-      <button class="panel-close" onclick="toggleFavPanel()">✕</button>
-    </div>
-    <div id="favList" class="fav-list">
-      <div class="compare-empty">No saved medicines yet.</div>
-    </div>
+    <div class="panel-header"><h3>♥ Saved Medicines</h3><button class="panel-close" onclick="toggleFavPanel()">✕</button></div>
+    <div id="favList" class="fav-list"><div class="compare-empty">No saved medicines yet.</div></div>
   </div>
-
-  <!-- PANEL OVERLAY -->
   <div id="panelOverlay" class="panel-overlay hidden" onclick="closePanels()"></div>
-
-  <!-- COMPARE MODAL -->
   <div id="compareModal" class="modal hidden">
     <div class="modal-inner">
-      <div class="modal-header">
-        <h3>Side-by-Side Comparison</h3>
-        <button onclick="closeCompareModal()">✕</button>
-      </div>
+      <div class="modal-header"><h3>Side-by-Side Comparison</h3><button onclick="closeCompareModal()">✕</button></div>
       <div id="compareTable" class="compare-table"></div>
     </div>
   </div>
-
   <footer>
     <div class="footer-inner">
       <span class="footer-brand">✚ MedScan</span>
       <span>Data from the US FDA OpenFDA database. For informational purposes only. Always consult a healthcare professional.</span>
     </div>
   </footer>
-
   <div id="toast" class="toast hidden"></div>
-
+  <!-- Auth guard — inline so no import issues -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    const firebaseConfig = {
+      apiKey: "AIzaSyC9mRnnrw7pHm2gcPRuiKQlrMrvAlXBoqI",
+      authDomain: "medscan-c5465.firebaseapp.com",
+      projectId: "medscan-c5465",
+      storageBucket: "medscan-c5465.firebasestorage.app",
+      messagingSenderId: "79146789931",
+      appId: "1:79146789931:web:d6fd36a44dd4b314580e6e"
+    };
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+        return;
+      }
+      const displayName = user.displayName
+        ? user.displayName.split(" ")[0]
+        : user.email.split("@")[0];
+      document.getElementById("userName").textContent   = displayName;
+      document.getElementById("userAvatar").textContent = displayName.charAt(0).toUpperCase();
+      document.getElementById("userChip").classList.add("visible");
+      document.getElementById("signOutBtn").classList.add("visible");
+    });
+    document.getElementById("signOutBtn").addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "login.html";
+    });
+  </script>
   <script src="script.js"></script>
 </body>
 </html>

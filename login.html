@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MedScan — Sign In</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f3ef; --bg2: #eceae4; --surface: #ffffff; --surface2: #f9f8f5;
+      --border: #e0ddd5; --text: #1a1814; --text2: #5a5650; --text3: #9a9590;
+      --accent: #c8453a; --accent2: #e8574b; --accent-bg: #fdf0ef;
+      --green: #2d8a5e; --green-bg: #edf7f2;
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.06);
+      --radius-sm: 8px; --radius-lg: 20px;
+      --transition: 0.22s cubic-bezier(0.4,0,0.2,1);
+    }
+    [data-theme="dark"] {
+      --bg: #0f0e0c; --bg2: #1a1916; --surface: #1e1d1a; --surface2: #252420;
+      --border: #2e2d29; --text: #f0ede6; --text2: #a09d96; --text3: #625f5a;
+      --accent: #e05a4e; --accent2: #f07060; --accent-bg: #2a1a18;
+      --green: #3dab74; --green-bg: #0d2318;
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.6);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text);
+      min-height: 100vh; display: flex; flex-direction: column;
+      transition: background var(--transition), color var(--transition);
+    }
+    .navbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 32px; background: var(--surface);
+      border-bottom: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: 10px;
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.25rem;
+      color: var(--accent); text-decoration: none;
+    }
+    .brand-icon {
+      width: 32px; height: 32px; background: var(--accent); color: white;
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; font-weight: 900;
+    }
+    .theme-toggle {
+      width: 38px; height: 38px; border: 1.5px solid var(--border);
+      border-radius: 50%; background: transparent; cursor: pointer;
+      font-size: 1rem; transition: all var(--transition);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .theme-toggle:hover { background: var(--surface2); transform: rotate(20deg); }
+    .page { flex: 1; display: flex; align-items: center; justify-content: center; padding: 48px 20px; }
+    .auth-wrap { width: 100%; max-width: 420px; }
+    .auth-brand { text-align: center; margin-bottom: 28px; animation: fadeUp 0.5s ease both; }
+    .auth-brand-icon {
+      width: 56px; height: 56px; background: var(--accent); color: white;
+      border-radius: 16px; display: inline-flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; font-weight: 900; margin-bottom: 12px;
+      box-shadow: 0 8px 24px rgba(200,69,58,0.25);
+    }
+    .auth-brand h1 { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; letter-spacing: -0.03em; }
+    .auth-brand h1 em { font-style: normal; color: var(--accent); }
+    .auth-brand p { color: var(--text2); font-size: 0.9rem; margin-top: 4px; font-weight: 300; }
+    .auth-card {
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg); padding: 36px 32px;
+      box-shadow: var(--shadow-lg); animation: fadeUp 0.5s 0.08s ease both;
+    }
+    .auth-card h2 { font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 4px; }
+    .auth-card .sub { color: var(--text3); font-size: 0.875rem; margin-bottom: 24px; font-weight: 300; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+      display: block; font-size: 0.78rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.06em; color: var(--text3); margin-bottom: 6px;
+    }
+    .input-wrap { position: relative; }
+    .input-wrap .icon {
+      position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
+      color: var(--text3); pointer-events: none;
+    }
+    .form-group input {
+      width: 100%; padding: 12px 14px 12px 38px;
+      border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+      background: var(--bg); color: var(--text);
+      font-family: 'DM Sans', sans-serif; font-size: 0.93rem;
+      outline: none; transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .form-group input:focus {
+      border-color: var(--accent); background: var(--surface);
+      box-shadow: 0 0 0 3px rgba(200,69,58,0.1);
+    }
+    .form-group input::placeholder { color: var(--text3); }
+    .btn-primary {
+      width: 100%; padding: 13px; background: var(--accent); color: white; border: none;
+      border-radius: var(--radius-sm); font-family: 'Syne', sans-serif;
+      font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all var(--transition);
+      display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 6px;
+    }
+    .btn-primary:hover:not(:disabled) { background: var(--accent2); transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .alert {
+      padding: 11px 14px; border-radius: var(--radius-sm); font-size: 0.875rem;
+      margin-bottom: 16px; gap: 8px; align-items: flex-start; line-height: 1.5; display: none;
+    }
+    .alert.error  { display: flex; background: var(--accent-bg); color: var(--accent); border: 1.5px solid var(--accent); }
+    .alert.success{ display: flex; background: var(--green-bg);  color: var(--green);  border: 1.5px solid var(--green);  }
+    .auth-footer { text-align: center; margin-top: 20px; font-size: 0.875rem; color: var(--text3); }
+    .auth-footer a { color: var(--accent); text-decoration: none; font-weight: 600; }
+    .auth-footer a:hover { text-decoration: underline; }
+    .spinner {
+      width: 17px; height: 17px; border: 2.5px solid rgba(255,255,255,0.35);
+      border-top-color: white; border-radius: 50%; animation: spin 0.65s linear infinite;
+    }
+    @keyframes spin    { to { transform: rotate(360deg); } }
+    @keyframes fadeUp  { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+    footer { border-top: 1.5px solid var(--border); padding: 16px 32px; background: var(--surface); }
+    .footer-inner { max-width: 960px; margin: 0 auto; display: flex; align-items: center; gap: 16px; font-size: 0.8rem; color: var(--text3); }
+    .footer-brand { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--accent); font-size: 0.9rem; }
+    @media (max-width: 480px) { .auth-card { padding: 28px 20px; } .navbar { padding: 12px 16px; } }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a class="nav-brand" href="#">
+      <span class="brand-icon">✚</span>
+      <span>MedScan</span>
+    </a>
+    <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()">🌙</button>
+  </nav>
+  <div class="page">
+    <div class="auth-wrap">
+      <div class="auth-brand">
+        <div class="auth-brand-icon">✚</div>
+        <h1>Med<em>Scan</em></h1>
+        <p>Your intelligent medicine companion</p>
+      </div>
+      <div class="auth-card">
+        <h2>Welcome back 👋</h2>
+        <p class="sub">Sign in to continue to MedScan.</p>
+        <div class="alert" id="alert"></div>
+        <form id="loginForm" novalidate>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <div class="input-wrap">
+              <span class="icon">✉</span>
+              <input type="email" id="email" placeholder="you@example.com" required autocomplete="email"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="input-wrap">
+              <span class="icon">🔒</span>
+              <input type="password" id="password" placeholder="Your password" required autocomplete="current-password"/>
+            </div>
+          </div>
+          <button type="submit" class="btn-primary" id="submitBtn">Sign In</button>
+        </form>
+        <div class="auth-footer">
+          Don't have an account? <a href="register.html">Sign up free</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-brand">✚ MedScan</span>
+      <span>Data from the US FDA OpenFDA database. For informational purposes only.</span>
+    </div>
+  </footer>
+  <script>
+    function initTheme() {
+      const saved = localStorage.getItem('medscan-theme') || 'light';
+      document.documentElement.setAttribute('data-theme', saved);
+      document.getElementById('themeBtn').textContent = saved === 'dark' ? '☀' : '🌙';
+    }
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('medscan-theme', next);
+      document.getElementById('themeBtn').textContent = next === 'dark' ? '☀' : '🌙';
+    }
+    initTheme();
+  </script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    const firebaseConfig = {
+      apiKey: "AIzaSyC9mRnnrw7pHm2gcPRuiKQlrMrvAlXBoqI",
+      authDomain: "medscan-c5465.firebaseapp.com",
+      projectId: "medscan-c5465",
+      storageBucket: "medscan-c5465.firebasestorage.app",
+      messagingSenderId: "79146789931",
+      appId: "1:79146789931:web:d6fd36a44dd4b314580e6e"
+    };
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const alertBox  = document.getElementById("alert");
+    const submitBtn = document.getElementById("submitBtn");
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        window.location.href = "index.html";
+      }
+    });
+    function showAlert(msg, type = "error") {
+      alertBox.className = `alert ${type}`;
+      alertBox.innerHTML = `<span>${type === "error" ? "⚠" : "✓"}</span>&nbsp;<span>${msg}</span>`;
+    }
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email    = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      if (!email || !password) { showAlert("Please fill in all fields."); return; }
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `<div class="spinner"></div> Signing in…`;
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        showAlert("Signed in! Redirecting…", "success");
+        setTimeout(() => { window.location.href = "index.html"; }, 800);
+      } catch (err) {
+        console.error(err.code, err.message);
+        showAlert(friendlyError(err.code));
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = "Sign In";
+      }
+    });
+    function friendlyError(code) {
+      return {
+        "auth/user-not-found":         "No account with this email. Please register first.",
+        "auth/wrong-password":         "Wrong password. Please try again.",
+        "auth/invalid-credential":     "Email or password is incorrect.",
+        "auth/invalid-email":          "Please enter a valid email.",
+        "auth/too-many-requests":      "Too many attempts. Wait a minute and try again.",
+        "auth/network-request-failed": "Network error. Check your connection.",
+      }[code] || `Error (${code}) — check F12 Console for details.`;
+    }
+  </script>
+</body>
+</html>
